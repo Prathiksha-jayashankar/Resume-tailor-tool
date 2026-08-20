@@ -32,6 +32,7 @@
     "@types/pdfkit": "^0.13.8",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
+    "@vercel/node": "^5.10.1",
     "@vitejs/plugin-react": "^4.3.1",
     "concurrently": "^9.1.0",
     "fast-check": "^3.22.0",
