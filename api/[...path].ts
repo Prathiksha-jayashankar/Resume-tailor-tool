@@ -1,20 +1,23 @@
 /**
- * Vercel Serverless Function: Catch-all handler for /api/resume-tailor/*
+ * Vercel Serverless Function: Catch-all handler for /api/*
  * Routes requests to the appropriate handler based on the path.
+ *
+ * This single file handles all API routes to avoid import resolution issues
+ * with nested api/ folder structures on Vercel.
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { sessionManager } from '../../server/resume-tailor/sessionManager'
-import { validateResumeContent } from '../../server/resume-tailor/resumeValidation'
-import { createLLMService } from '../../server/resume-tailor/llmServiceAdapter'
-import { createResumeParser } from '../../server/resume-tailor/resumeParserService'
-import { createJobDescriptionAnalyzer } from '../../server/resume-tailor/jobDescriptionAnalyzer'
-import { createKeywordMatcher } from '../../server/resume-tailor/keywordMatcher'
-import { calculateMatchScore, calculateCategoryScore, isWellAligned } from '../../server/resume-tailor/matchScoreEngine'
-import { createSuggestionEngine } from '../../server/resume-tailor/suggestionEngine'
-import { applySuggestions, detectConflicts } from '../../server/resume-tailor/resumeModifier'
-import { generateDownload } from '../../server/resume-tailor/downloadGenerator'
-import type { AnalysisResult, Suggestion } from '../../server/resume-tailor/types'
+import { sessionManager } from '../server/resume-tailor/sessionManager'
+import { validateResumeContent } from '../server/resume-tailor/resumeValidation'
+import { createLLMService } from '../server/resume-tailor/llmServiceAdapter'
+import { createResumeParser } from '../server/resume-tailor/resumeParserService'
+import { createJobDescriptionAnalyzer } from '../server/resume-tailor/jobDescriptionAnalyzer'
+import { createKeywordMatcher } from '../server/resume-tailor/keywordMatcher'
+import { calculateMatchScore, calculateCategoryScore, isWellAligned } from '../server/resume-tailor/matchScoreEngine'
+import { createSuggestionEngine } from '../server/resume-tailor/suggestionEngine'
+import { applySuggestions, detectConflicts } from '../server/resume-tailor/resumeModifier'
+import { generateDownload } from '../server/resume-tailor/downloadGenerator'
+import type { AnalysisResult, Suggestion } from '../server/resume-tailor/types'
 
 export const config = {
   maxDuration: 60,
@@ -33,10 +36,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end()
   }
 
-  // Parse the path segments
+  // Parse the path: /api/resume-tailor/session -> ["resume-tailor", "session"]
   const pathParam = req.query.path
   const pathSegments = Array.isArray(pathParam) ? pathParam : pathParam ? [pathParam] : []
-  const route = pathSegments.join('/')
+
+  // Strip "resume-tailor" prefix if present
+  let routeSegments = pathSegments
+  if (pathSegments[0] === 'resume-tailor') {
+    routeSegments = pathSegments.slice(1)
+  }
+
+  const route = routeSegments.join('/')
 
   try {
     // POST /api/resume-tailor/session
@@ -46,8 +56,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // DELETE /api/resume-tailor/session/:id
-    if (pathSegments[0] === 'session' && pathSegments.length === 2 && req.method === 'DELETE') {
-      const id = pathSegments[1]
+    if (routeSegments[0] === 'session' && routeSegments.length === 2 && req.method === 'DELETE') {
+      const id = routeSegments[1]
       const deleted = sessionManager.deleteSession(id)
       if (!deleted) {
         return res.status(404).json({ error: 'Session not found' })
@@ -71,13 +81,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // GET /api/resume-tailor/download/:format
-    if (pathSegments[0] === 'download' && pathSegments.length === 2 && req.method === 'GET') {
-      return await handleDownload(req, res, pathSegments[1])
+    if (routeSegments[0] === 'download' && routeSegments.length === 2 && req.method === 'GET') {
+      return await handleDownload(req, res, routeSegments[1])
     }
 
-    return res.status(404).json({ error: 'Not found' })
+    // Health check
+    if (route === '' || route === 'health') {
+      return res.status(200).json({ status: 'ok', timestamp: Date.now() })
+    }
+
+    return res.status(404).json({ error: `Not found: /api/${pathSegments.join('/')}` })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred.'
+    console.error('[API Error]', error)
     return res.status(500).json({ error: message })
   }
 }
