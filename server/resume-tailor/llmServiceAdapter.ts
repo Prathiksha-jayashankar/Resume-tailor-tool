@@ -41,7 +41,7 @@ export type LLMResult =
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const DEFAULT_MODEL = 'gpt-4o-mini'
+const DEFAULT_MODEL = process.env.LLM_MODEL || 'llama-3.1-8b-instant'
 const DEFAULT_MAX_TOKENS = 4096
 const DEFAULT_TEMPERATURE = 0.3
 const MAX_RETRIES = 2
@@ -63,6 +63,7 @@ export class LLMServiceAdapter {
 
     this.client = new OpenAI({
       apiKey: this.config.apiKey,
+      baseURL: process.env.LLM_BASE_URL || 'https://api.groq.com/openai/v1',
       timeout: this.config.timeout,
     })
   }
