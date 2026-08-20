@@ -1,0 +1,118 @@
+/* Design Tokens - CSS Custom Properties
+ * Centralized design system for the Resume Tailor Tool.
+ * All components consume these tokens via var(--token-name, fallback).
+ */
+
+:root {
+  /* ============================================
+   * Colors
+   * ============================================ */
+
+  /* Primary */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-light: #eff6ff;
+
+  /* Secondary */
+  --color-secondary: #7c3aed;
+
+  /* Accent */
+  --color-accent: #06b6d4;
+
+  /* Semantic */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* Surfaces */
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-background: #f8fafc;
+
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+
+  /* ============================================
+   * Spacing Scale (4px base unit)
+   * ============================================ */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+
+  /* ============================================
+   * Typography
+   * ============================================ */
+
+  /* Heading 1 */
+  --font-size-heading1: 2rem;
+  --font-weight-heading1: 700;
+  --line-height-heading1: 1.2;
+
+  /* Heading 2 */
+  --font-size-heading2: 1.5rem;
+  --font-weight-heading2: 600;
+  --line-height-heading2: 1.3;
+
+  /* Heading 3 */
+  --font-size-heading3: 1.25rem;
+  --font-weight-heading3: 600;
+  --line-height-heading3: 1.4;
+
+  /* Body */
+  --font-size-body: 1rem;
+  --font-weight-body: 400;
+  --line-height-body: 1.5;
+
+  /* Caption */
+  --font-size-caption: 0.875rem;
+  --font-weight-caption: 400;
+  --line-height-caption: 1.4;
+
+  /* ============================================
+   * Shadows
+   * ============================================ */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  /* ============================================
+   * Border Radii
+   * ============================================ */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ============================================
+   * Transitions
+   * ============================================ */
+
+  /* Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* Timing Functions */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ============================================
+ * Reduced Motion Preference
+ * ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}

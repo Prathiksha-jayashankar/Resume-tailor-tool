@@ -1,0 +1,85 @@
+/**
+ * Responsive styles for Resume Tailor Tool
+ *
+ * Breakpoints:
+ *   - Mobile:  320px – 767px
+ *   - Tablet:  768px – 1023px
+ *   - Desktop: 1024px – 2560px
+ *
+ * Requirements: 7.1, 7.2, 7.3, 7.4, 7.6, 7.7
+ */
+
+/* Base styles — prevent horizontal scroll on all viewports (Req 7.1) */
+.resume-tailor-page {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Ensure all children respect box-sizing */
+.resume-tailor-page *,
+.resume-tailor-page *::before,
+.resume-tailor-page *::after {
+  box-sizing: border-box;
+}
+
+/* ─── Mobile (320px – 767px) ─────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Stack input sections vertically with full-width components (Req 7.3) */
+  .resume-tailor-page .input-section {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    grid-template-columns: unset !important;
+  }
+
+  /* Minimum font sizes (Req 7.7) */
+  .resume-tailor-page {
+    font-size: 16px;
+  }
+
+  .resume-tailor-page label,
+  .resume-tailor-page .label {
+    font-size: 14px;
+  }
+
+  /* Minimum touch target size 44x44px (Req 7.4) */
+  .resume-tailor-page button,
+  .resume-tailor-page input[type="file"],
+  .resume-tailor-page [role="button"],
+  .resume-tailor-page select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Virtual keyboard handling — keep active input visible (Req 7.6) */
+  .resume-tailor-page textarea,
+  .resume-tailor-page input,
+  .resume-tailor-page select {
+    scroll-margin-bottom: 300px;
+  }
+
+  /* Full-width inputs on mobile */
+  .resume-tailor-page textarea,
+  .resume-tailor-page input,
+  .resume-tailor-page select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .resume-tailor-page .input-section {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ─── Desktop (1024px – 2560px) ──────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .resume-tailor-page .input-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
