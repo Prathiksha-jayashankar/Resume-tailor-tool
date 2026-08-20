@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: resume-tailor-tool
+    runtime: node
+    buildCommand: npm install && npm run render-build
+    startCommand: npm start
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: LLM_MODEL
+        value: llama-3.1-8b-instant
+      - key: NODE_ENV
+        value: production
